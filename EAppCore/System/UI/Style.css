@@ -1,0 +1,301 @@
+
+@font-face {
+    font-family: "SF Pro Display Bold";
+    src: url("Fonts/SF Pro Display Bold.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "SF Pro Display Medium";
+    src: url("Fonts/SF Pro Display Medium.otf") format("opentype");
+    font-style: normal;
+    font-weight: normal;
+}
+
+:root {
+    --BODY_COLOR: rgb(240 240 240);
+    --AIR_COLOR: rgb(255 255 255 / 90%);
+    --AIR_SHADOW: 0px 3px 10px -3px rgb(114 114 114 / 50%);
+    --BLOCK_COLOR: rgb(254 254 254);
+    --BTN_BACKGROUND: rgb(242 242 242);
+    --BTN_COLOR: rgb(124 125 136);
+    --GRADIENT: linear-gradient(345deg, #b159b8, #8386d5) #5c4882;
+    --GRADIENT_SHADOW: 0px 0px 9px -1px rgb(154 112 199 / 67%);
+    --NL_GRADIENT: linear-gradient(33deg, #afafaf, #d0d0d0);
+    --GOLD_GRADIENT: linear-gradient(465deg, #fab31e, #fd9347);
+    --TITLE_COLOR: rgb(105 106 108);
+    --TEXT_COLOR: rgb(121 121 121);
+    --FS_TITLE: 1.08em;
+    --FS_TEXT: 0.92em;
+    --FS_NAME: 1em;
+    --FS_D_OR_P: 0.8em;
+    --FF_TITLE: SF Pro Display Bold;
+    --C_TOP_MARGIN: 80px;
+    --BR_BASE: 10px/9px;
+    --AIR_BLUR: saturate(200%) blur(20px);
+    --D_OR_P_COLOR: rgb(154 154 154);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+input:not([type="checkbox"]),
+textarea,
+select,
+button {
+    font-size: var(--FS_TEXT);
+    font-family: inherit;
+    outline: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    user-select: none;
+}
+button:active {
+    filter: brightness(0.8);
+}
+
+body {
+    background: var(--BODY_COLOR);
+    color: var(--TEXT_COLOR);
+    font-family: SF Pro Display Medium;
+    font-size: var(--FS_TEXT);
+    letter-spacing: 0.019em;
+}
+
+/* Интерфейс */
+
+.UI-Avatar {
+    background: var(--NL_GRADIENT);
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    line-height: 0;
+}
+
+.UI-Input {
+    background: rgb(225 225 225 / 33%);
+    border: 1px solid rgb(89 93 105 / 10%);
+    color: var(--TEXT_COLOR);
+    font-size: var(--FS_TEXT);
+    border-radius: 8px;
+}
+
+.UI-Input::-webkit-input-placeholder {
+    color: var(--TEXT_COLOR);
+}
+
+.UI-Block {
+    background: var(--BLOCK_COLOR);
+    border-radius: var(--BR_BASE);
+    margin-bottom: 7px;
+    padding: 10px;
+    box-shadow: 0px 4px 10px -9px rgb(64 64 64 / 50%);
+}
+
+.UI-Loading {
+    background: rgb(255 255 255 / 40%);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+}
+.UI-Loading::after {
+    background: rgb(255 255 255 / 50%);
+    filter: blur(60px);
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: TEXT_PRELOAD-ANIM 1s infinite ease-out;
+}
+
+/* Интерфейс - Ошибка */
+
+.UI-Window_BG {
+    background: rgb(23 23 23 / 50%);
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: fixed;
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.UI-Window {
+    background: var(--AIR_COLOR);
+    backdrop-filter: var(--AIR_BLUR);
+    -webkit-backdrop-filter: var(--AIR_BLUR);
+    border-radius: 13px;
+    height: fit-content;
+    max-height: 500px;
+    width: 270px;
+    padding: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 11;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-box-shadow: 0px 3px 14px -3px rgb(64 64 64 / 70%);
+    -moz-box-shadow: 0px 3px 14px -3px rgb(64 64 64 / 70%);
+    box-shadow: 0px 3px 14px -3px rgb(64 64 64 / 70%);
+}
+
+.UI-Window_content {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+.UI-Window_title {
+    font-family: var(--FF_TITLE);
+    font-size: var(--FS_TITLE);
+}
+
+.UI-Window_text {
+    color: var(--TEXT_COLOR);
+    font-size: var(--FS_TEXT);
+    margin-top: 15px;
+}
+
+.UI-Window_BTNS {
+    width: 96%;
+    height: 30px;
+    margin: 13px 5px 5px 5px;
+    display: flex;
+}
+
+.UI-Window_BW {
+    width: 15px;
+}
+
+.UI-Window_input {
+    width: 100%;
+    height: 35px;
+    padding: 0px 10px;
+    margin-top: 10px;
+}
+
+.UI-Window_button {
+    background: var(--GRADIENT);
+    color: #FFF;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--BR_BASE);
+    text-align: center;
+    -webkit-box-shadow: var(--GRADIENT_SHADOW);
+    -moz-box-shadow: var(--GRADIENT_SHADOW);
+    box-shadow: var(--GRADIENT_SHADOW);
+}
+
+.UI-Window_BTN_NOACT {
+    background: var(--BODY_COLOR);
+    color: var(--TEXT_COLOR);
+    border: 1px solid rgb(89 93 105 / 10%);
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.UI-E_IMG {
+    filter: contrast(0.2);
+    width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Страница приветствия */
+
+.WelcomePage {
+    width: 900px;
+    height: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.WelcomePage .LogoAndTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.WelcomePage .Logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+.WelcomePage .Title {
+    text-align: center;
+    width: 70%;
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+.WelcomePage .Info {
+    max-width: 90%;
+    font-size: 0.9em;
+    text-align: center;
+    padding: 7px 10px;
+}
+
+.WelcomePage .Buttons {
+    overflow: hidden;
+    border-radius: var(--BR_BASE);
+    margin-top: 15px;
+}
+.WelcomePage .Buttons .Button {
+    background: var(--BTN_BACKGROUND);
+    color: var(--BTN_COLOR);
+    border: none;
+    font-size: var(--FS_TEXT);
+    padding: 5px 16px;
+    cursor: pointer;
+    user-select: none;
+}
+.WelcomePage .Buttons .Button:active {
+    filter: brightness(0.8);
+}
+
+.WelcomePage .Wathermark {
+    color: rgb(95 95 95 / 50%);
+    font-size: 0.8em;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    margin: 5px 10px;
+}

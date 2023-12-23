@@ -1,0 +1,75 @@
+import sys
+import os
+import subprocess
+import requests
+import json
+import hashlib
+import base64
+import zipfile
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtWebEngineWidgets import *
+from PyQt5.QtWebChannel import *
+
+ElmInstaled = False
+
+def CreateSHA256 (FilePath):
+    with open(FilePath, 'rb') as f:
+        Hash = hashlib.sha256()
+        for byte_block in iter(lambda: f.read(4096), b""):
+            Hash.update(byte_block)
+    return Hash.hexdigest()
+
+class Object (QObject):
+    @pyqtSlot(str)
+    def SelectFile(self, FileData):
+
+        FileData = json.loads(FileData)
+        FileName = FileData['Name']
+        FileContent = base64.urlsafe_b64decode(FileData['Content'])
+        FilePath = os.path.join('ElementRes', FileName)
+
+        with open(FilePath, 'wb') as f:
+            f.write(FileContent)
+
+        with open(FilePath, 'rb') as f:
+            Hash = CreateSHA256(FilePath)
+            print(Hash)
+            URL = 'https://elm.lol/System/API/VerifyFileSignature.php'
+            Data = {'Hash': Hash}
+            Request = requests.post(URL, data=Data)
+            Answer = json.loads(Request.text)
+
+            if Answer['Content'] == 'Signed':
+                with zipfile.ZipFile(FilePath, 'r') as zip_ref:
+                    zip_ref.extractall('ElementRes')
+
+            
+
+class MainWindow (QMainWindow):
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        profile = QWebEngineProfile.defaultProfile()
+        profile.setHttpCacheType(QWebEngineProfile.NoCache)
+
+        self.WebView = QWebEngineView()
+        self.WebChannel = QWebChannel()
+        self.Object = Object()
+
+        if ElmInstaled == True:
+            subprocess.Popen(['python', 'LHStart.py'])
+            self.WebView.setUrl(QUrl('http://127.0.0.1:5023'))
+        else:
+            self.WebChannel.registerObject('Object', self.Object)
+            self.WebView.page().setWebChannel(self.WebChannel)
+            self.WebView.setUrl(QUrl.fromLocalFile('/EAppCore/index.html'))
+
+        self.WebView.setZoomFactor(1.3)
+        self.setCentralWidget(self.WebView)
+        self.setWindowTitle('Element')
+        self.showMaximized()
+
+App = QApplication(sys.argv)
+Window = MainWindow()
+Window.show()
+App.exec_()
